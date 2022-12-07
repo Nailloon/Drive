@@ -5,6 +5,7 @@ using TMPro;
 
 public class Engine
 {
+    public bool isRunning;
     public float RPM;
     private float HP;
     public float currentHP(float RPM) {
@@ -22,7 +23,11 @@ public class Engine
     }
 
     public void start() {
-        RPM = Mathf.Lerp(0, 800, 1);
+        RPM += 800*Time.deltaTime;
+    }
+    public void updateState() {
+        throttlePosition = Mathf.Abs(Input.GetAxis("Vertical"));
+        
     }
 }
 
@@ -67,14 +72,19 @@ public class CarController : MonoBehaviour
 
 
     void Start() {
-        engine.start();
         UIRPMUpdater updater = RPM_UI.GetComponent<UIRPMUpdater>();
-
-        updater.RPM = engine.RPM;
+        updater.RPM = 0;
 
     }
 
-    private void FixedUpdate() {
+    private void Update() {
+        if (!engine.isRunning) {
+            if (Input.GetKeyDown(KeyCode.N)) {
+                engine.start();
+            }
+        }
+        UIRPMUpdater updater = RPM_UI.GetComponent<UIRPMUpdater>();
+        updater.RPM = engine.RPM;
         GetInput();
         HandleMotor();
         HandleSteering();
@@ -90,8 +100,8 @@ public class CarController : MonoBehaviour
         Brake();
     }
     private void Brake() {
-            // flCollider.brakeTorque = currentBreaking;
-            // frCollider.brakeTorque = currentBreaking;
+            flCollider.brakeTorque = currentBreaking;
+            frCollider.brakeTorque = currentBreaking;
             rlCollider.brakeTorque = currentBreaking;
             frCollider.brakeTorque = currentBreaking;
     }
