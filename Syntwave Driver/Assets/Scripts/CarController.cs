@@ -3,51 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class Engine
-{
-    public bool isRunning;
-    public float RPM;
-    private float HP;
-    public float currentHP(float RPM) {
-        return (-RPM*RPM/maxRPM + 1.5f*RPM/maxRPM + 0.4375f)*HP;
-    }
-    private float currentTorque(float RPM) {
-        return currentHP(RPM)*5252/RPM;
-    }
-    private float maxRPM;
-    private float throttlePosition;
-    public Engine(float hp, float mRPM) {
-        RPM = 0;
-        HP = hp;
-        maxRPM = mRPM;
-    }
-
-    public void start() {
-        RPM += 800*Time.deltaTime;
-    }
-    public void updateState() {
-        throttlePosition = Mathf.Abs(Input.GetAxis("Vertical"));
-        
-    }
-}
-
-public class Transmission
-{
-    public int currentGear;
-    public float[] gearRatios;
-
-    public Transmission(float[] gR) {
-        currentGear = 0;
-        gearRatios = gR;
-    }
-}
 
 public class CarController : MonoBehaviour
 {
-    Engine engine = new Engine(150, 8000);
-    Transmission transmission = new Transmission(new float[] {0.3f, 0.29f, 0.51f, 0.73f, 1f, 1.35f});
-
-    [SerializeField] private TextMeshProUGUI RPM_UI;
 
     [SerializeField] private float horizontalInput;
     [SerializeField] private float verticalInput;
@@ -69,28 +27,19 @@ public class CarController : MonoBehaviour
     [SerializeField] private Transform rlTransform;
     [SerializeField] private Transform rrTransform;
 
+    [SerializeField] private brakelights brakelights;
 
-
-    void Start() {
-        UIRPMUpdater updater = RPM_UI.GetComponent<UIRPMUpdater>();
-        updater.RPM = 0;
+    private void Start() {
 
     }
 
     private void Update() {
-        if (!engine.isRunning) {
-            if (Input.GetKeyDown(KeyCode.N)) {
-                engine.start();
-            }
-        }
-        UIRPMUpdater updater = RPM_UI.GetComponent<UIRPMUpdater>();
-        updater.RPM = engine.RPM;
         GetInput();
         HandleMotor();
         HandleSteering();
         UpdateWheels();
     }
-
+ 
     private void HandleMotor() {
         frCollider.motorTorque = verticalInput * motorForce;
         flCollider.motorTorque = verticalInput * motorForce;
@@ -100,10 +49,12 @@ public class CarController : MonoBehaviour
         Brake();
     }
     private void Brake() {
-            flCollider.brakeTorque = currentBreaking;
-            frCollider.brakeTorque = currentBreaking;
-            rlCollider.brakeTorque = currentBreaking;
-            frCollider.brakeTorque = currentBreaking;
+        flCollider.brakeTorque = currentBreaking;
+        frCollider.brakeTorque = currentBreaking;
+        rlCollider.brakeTorque = currentBreaking;
+        frCollider.brakeTorque = currentBreaking;
+        if (currentBreaking > 0) brakelights.change();
+
     }
     private void HandleSteering() {
         steerAngle = maxSteerAngle * horizontalInput;
