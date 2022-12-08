@@ -33,7 +33,7 @@ public class CarController : MonoBehaviour
 
     }
 
-    private void Update() {
+    private void FixedUpdate() {
         GetInput();
         HandleMotor();
         HandleSteering();
