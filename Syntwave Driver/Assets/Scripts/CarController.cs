@@ -10,7 +10,8 @@ public class CarController : MonoBehaviour
     [SerializeField] private float horizontalInput;
     [SerializeField] private float verticalInput;
     [SerializeField] private float steerAngle;
-    [SerializeField] private bool isBreaking;
+    private bool isBreaking;
+    private bool isHandBraking;
     [SerializeField] private float currentBreaking;
 
     [SerializeField] public float motorForce;
@@ -27,17 +28,31 @@ public class CarController : MonoBehaviour
     [SerializeField] private Transform rlTransform;
     [SerializeField] private Transform rrTransform;
 
-    [SerializeField] private brakelights brakelights;
+    [SerializeField] private GameObject brakelights;
+
+    private brakelights brakelightsHandle;
+
+    private MeshRenderer brakelightsRender;
 
     [SerializeField] private float radius;
 
     [SerializeField] private float wheelBase;
 
-    private void Start() {
+    [SerializeField] private float downForce;
+    
+    [SerializeField] private GameObject centerOfMassPoint;
 
+    private Rigidbody physicsBody;
+
+    private void Start() {
+        physicsBody = GetComponent<Rigidbody>();
+        brakelightsHandle = brakelights.GetComponent<brakelights>();
+        brakelightsRender = brakelights.GetComponent<MeshRenderer>();
     }
 
     private void FixedUpdate() {
+        calculateCenterOfMass();
+        applyDownForce();
         GetInput();
         HandleMotor();
         HandleSteering();
@@ -47,9 +62,10 @@ public class CarController : MonoBehaviour
     private void HandleMotor() {
         frCollider.motorTorque = verticalInput * motorForce;
         flCollider.motorTorque = verticalInput * motorForce;
-        // rrCollider.motorTorque = verticalInput * motorForce;
-        // rlCollider.motorTorque = verticalInput * motorForce;
-        currentBreaking = isBreaking ? breakingForce : 0f;
+        rrCollider.motorTorque = verticalInput * motorForce;
+        rlCollider.motorTorque = verticalInput * motorForce;
+        currentBreaking = (isBreaking | isHandBraking) ? breakingForce : 0f;
+        HandBrake();
         Brake();
     }
     private void Brake() {
@@ -57,13 +73,12 @@ public class CarController : MonoBehaviour
         frCollider.brakeTorque = currentBreaking;
         rlCollider.brakeTorque = currentBreaking;
         rrCollider.brakeTorque = currentBreaking;
-        if (currentBreaking == 1) {
-            frCollider.motorTorque = -1;
-            flCollider.motorTorque = -1;
-            rrCollider.motorTorque = -1;
-            rlCollider.motorTorque = -1;
+        if (isBreaking & !(brakelightsRender.enabled)) {
+            brakelightsHandle.change();
         }
-        if (currentBreaking > 0) brakelights.change();
+        if (!isBreaking & brakelightsRender.enabled) {
+            brakelightsHandle.change();
+        }
 
     }
     private void HandleSteering() {
@@ -94,6 +109,20 @@ public class CarController : MonoBehaviour
     private void GetInput() {
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
-        isBreaking = Input.GetKey(KeyCode.Space);
+        isBreaking = (verticalInput < 0) & (physicsBody.velocity.magnitude > 0.1f);
+        isHandBraking = Input.GetKey(KeyCode.Space);
+    }
+
+    private void calculateCenterOfMass() {
+        physicsBody.centerOfMass = centerOfMassPoint.transform.localPosition;
+    }
+
+    private void applyDownForce() {
+        physicsBody.AddForce(-transform.up * downForce * physicsBody.velocity.magnitude);
+    }
+    
+    private void HandBrake() {
+        rlCollider.brakeTorque = currentBreaking / 2;
+        rrCollider.brakeTorque = currentBreaking / 2;
     }
 }
