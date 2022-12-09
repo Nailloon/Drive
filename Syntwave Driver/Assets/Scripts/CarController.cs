@@ -29,6 +29,10 @@ public class CarController : MonoBehaviour
 
     [SerializeField] private brakelights brakelights;
 
+    [SerializeField] private float radius;
+
+    [SerializeField] private float wheelBase;
+
     private void Start() {
 
     }
@@ -57,9 +61,15 @@ public class CarController : MonoBehaviour
 
     }
     private void HandleSteering() {
-        steerAngle = maxSteerAngle * horizontalInput;
-        frCollider.steerAngle = steerAngle;
-        flCollider.steerAngle = steerAngle;
+        steerAngle = horizontalInput;
+        if (steerAngle > 0) {
+            frCollider.steerAngle = Mathf.Rad2Deg * Mathf.Atan(wheelBase / (radius + (1.5f / 2))) * horizontalInput;
+            flCollider.steerAngle = Mathf.Rad2Deg * Mathf.Atan(wheelBase / (radius -(1.5f / 2))) * horizontalInput;
+        } else {
+            frCollider.steerAngle = Mathf.Rad2Deg * Mathf.Atan(wheelBase / (radius - (1.5f / 2))) * horizontalInput;
+            flCollider.steerAngle = Mathf.Rad2Deg * Mathf.Atan(wheelBase / (radius + (1.5f / 2))) * horizontalInput;
+        }
+        
     }
     private void UpdateWheels() {
         UpdateWheel(flCollider, flTransform);
