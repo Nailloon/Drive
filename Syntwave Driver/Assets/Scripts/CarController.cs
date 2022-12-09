@@ -48,7 +48,7 @@ public class CarController : MonoBehaviour
         frCollider.motorTorque = verticalInput * motorForce;
         flCollider.motorTorque = verticalInput * motorForce;
         // rrCollider.motorTorque = verticalInput * motorForce;
-        // rrCollider.motorTorque = verticalInput * motorForce;
+        // rlCollider.motorTorque = verticalInput * motorForce;
         currentBreaking = isBreaking ? breakingForce : 0f;
         Brake();
     }
@@ -56,7 +56,13 @@ public class CarController : MonoBehaviour
         flCollider.brakeTorque = currentBreaking;
         frCollider.brakeTorque = currentBreaking;
         rlCollider.brakeTorque = currentBreaking;
-        frCollider.brakeTorque = currentBreaking;
+        rrCollider.brakeTorque = currentBreaking;
+        if (currentBreaking == 1) {
+            frCollider.motorTorque = -1;
+            flCollider.motorTorque = -1;
+            rrCollider.motorTorque = -1;
+            rlCollider.motorTorque = -1;
+        }
         if (currentBreaking > 0) brakelights.change();
 
     }

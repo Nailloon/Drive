@@ -40,7 +40,7 @@ public class Engine : MonoBehaviour
         } else {
             isStarting = false;
         }
-        Engine_UI_updater.RPM = RPM;
+        
     } 
 
 }
