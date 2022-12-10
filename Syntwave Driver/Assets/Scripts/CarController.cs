@@ -17,6 +17,8 @@ public class CarController : MonoBehaviour
     [SerializeField] public float motorForce;
     [SerializeField] public float breakingForce;
     [SerializeField] public float maxSteerAngle;
+
+    [SerializeField] AnimationCurve enginePower;
     
     [SerializeField] private WheelCollider flCollider;
     [SerializeField] private WheelCollider frCollider;
@@ -48,6 +50,17 @@ public class CarController : MonoBehaviour
 
     private Rigidbody physicsBody;
 
+    [SerializeField] private float[] gearRatios;
+    public float engineRPM;
+    [SerializeField] int currentGear;
+
+    [SerializeField] private int[] upshiftPoints;
+
+    private const float shiftDuration = 0.4f;
+    [SerializeField] private float currentShiftDuration = 0;
+
+    private bool needToUpshift = false;
+
     private void Start() {
 
         VehicleSetUp();
@@ -58,6 +71,7 @@ public class CarController : MonoBehaviour
         calculateCenterOfMass();
         applyDownForce();
         GetInput();
+        calculateEnginePower();
         HandleMotor();
         HandleSteering();
         UpdateWheels();
@@ -83,13 +97,19 @@ public class CarController : MonoBehaviour
         rrTransform = GameObject.Find("wheel_rr_axis").transform;
 
         centerOfMassPoint = GameObject.Find("center_mass");
+
+        gearRatios = new float[] {3.33f, 3.45f, 1.94f, 1.36f, 0.97f, 0.73f};
+        upshiftPoints = new int[] {100000, 6500, 5700, 5350, 5100, -1};
+
+
+        engineRPM = 200;
     }
  
     private void HandleMotor() {
-        frCollider.motorTorque = verticalInput * motorForce;
-        flCollider.motorTorque = verticalInput * motorForce;
-        rrCollider.motorTorque = verticalInput * motorForce;
-        rlCollider.motorTorque = verticalInput * motorForce;
+        frCollider.motorTorque = verticalInput * motorForce / 4;
+        flCollider.motorTorque = verticalInput * motorForce / 4;
+        rrCollider.motorTorque = verticalInput * motorForce / 4;
+        rlCollider.motorTorque = verticalInput * motorForce / 4;
         currentBreaking = (isBreaking | isHandBraking) ? breakingForce : 0f;
         HandBrake();
         Brake();
@@ -160,5 +180,32 @@ public class CarController : MonoBehaviour
         slip[2] = wH.sidewaysSlip;
         rrCollider.GetGroundHit(out wH);
         slip[3] = wH.sidewaysSlip;
+    }
+
+    private float wheelsRPM() {
+        return (flCollider.rpm + flCollider.rpm + flCollider.rpm + flCollider.rpm) / 4;
+    }
+
+    private void upshift() {
+        currentShiftDuration += Time.deltaTime;
+        if (currentShiftDuration < shiftDuration) {
+            motorForce = 0;
+        } else {
+            currentShiftDuration = 0;
+            currentGear = currentGear == gearRatios.Length - 1 ? currentGear : currentGear + 1;
+            needToUpshift = false;
+        }
+    }
+
+    private void calculateEnginePower() {
+        motorForce = enginePower.Evaluate(engineRPM) * gearRatios[currentGear];
+        float velocity = 0.0f;
+        engineRPM = Mathf.SmoothDamp(engineRPM, 650 + (Mathf.Abs(wheelsRPM()) * 4.4f *  gearRatios[currentGear]), ref velocity, 0.1f);
+        if (engineRPM > upshiftPoints[currentGear]) {
+            needToUpshift = true;
+        }
+        if (needToUpshift) {
+            upshift();
+        }
     }
 }
