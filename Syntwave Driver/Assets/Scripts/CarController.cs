@@ -7,12 +7,12 @@ using TMPro;
 public class CarController : MonoBehaviour
 {
 
-    [SerializeField] private float horizontalInput;
-    [SerializeField] private float verticalInput;
-    [SerializeField] private float steerAngle;
+    private float horizontalInput;
+    private float verticalInput;
+    private float steerAngle;
     private bool isBreaking;
     private bool isHandBraking;
-    [SerializeField] private float currentBreaking;
+    private float currentBreaking;
 
     [SerializeField] public float motorForce;
     [SerializeField] public float breakingForce;
@@ -23,10 +23,14 @@ public class CarController : MonoBehaviour
     [SerializeField] private WheelCollider rlCollider;
     [SerializeField] private WheelCollider rrCollider;
 
-    [SerializeField] private Transform flTransform;
-    [SerializeField] private Transform frTransform;
-    [SerializeField] private Transform rlTransform;
-    [SerializeField] private Transform rrTransform;
+    WheelHit wH;
+
+    public float[] slip = new float[4];
+
+    private Transform flTransform;
+    private Transform frTransform;
+    private Transform rlTransform;
+    private Transform rrTransform;
 
     [SerializeField] private GameObject brakelights;
 
@@ -40,14 +44,14 @@ public class CarController : MonoBehaviour
 
     [SerializeField] private float downForce;
     
-    [SerializeField] private GameObject centerOfMassPoint;
+    private GameObject centerOfMassPoint;
 
     private Rigidbody physicsBody;
 
     private void Start() {
-        physicsBody = GetComponent<Rigidbody>();
-        brakelightsHandle = brakelights.GetComponent<brakelights>();
-        brakelightsRender = brakelights.GetComponent<MeshRenderer>();
+
+        VehicleSetUp();
+
     }
 
     private void FixedUpdate() {
@@ -57,6 +61,28 @@ public class CarController : MonoBehaviour
         HandleMotor();
         HandleSteering();
         UpdateWheels();
+        GetFriction();
+    }
+    
+    private void VehicleSetUp() {
+
+        physicsBody = GetComponent<Rigidbody>();
+
+        brakelights = GameObject.Find("brakelights"); 
+        brakelightsHandle = brakelights.GetComponent<brakelights>();
+        brakelightsRender = brakelights.GetComponent<MeshRenderer>();
+
+        flCollider = GameObject.Find("wheel_collider_fl").GetComponent<WheelCollider>();
+        frCollider = GameObject.Find("wheel_collider_fr").GetComponent<WheelCollider>();
+        rlCollider = GameObject.Find("wheel_collider_rl").GetComponent<WheelCollider>();
+        rrCollider = GameObject.Find("wheel_collider_rr").GetComponent<WheelCollider>();
+
+        flTransform = GameObject.Find("wheel_fl_axis").transform;
+        frTransform = GameObject.Find("wheel_fr_axis").transform;
+        rlTransform = GameObject.Find("wheel_rl_axis").transform;
+        rrTransform = GameObject.Find("wheel_rr_axis").transform;
+
+        centerOfMassPoint = GameObject.Find("center_mass");
     }
  
     private void HandleMotor() {
@@ -124,5 +150,15 @@ public class CarController : MonoBehaviour
     private void HandBrake() {
         rlCollider.brakeTorque = currentBreaking / 2;
         rrCollider.brakeTorque = currentBreaking / 2;
+    }
+    private void GetFriction() {
+        flCollider.GetGroundHit(out wH);
+        slip[0] = wH.sidewaysSlip;
+        frCollider.GetGroundHit(out wH);
+        slip[1] = wH.sidewaysSlip;
+        rlCollider.GetGroundHit(out wH);
+        slip[2] = wH.sidewaysSlip;
+        rrCollider.GetGroundHit(out wH);
+        slip[3] = wH.sidewaysSlip;
     }
 }

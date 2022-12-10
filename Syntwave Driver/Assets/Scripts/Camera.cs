@@ -8,13 +8,16 @@ public class Camera : MonoBehaviour
     [SerializeField] private float cameraSpeed;
     [SerializeField] private GameObject cameraPoint;
     [SerializeField] private GameObject lookAtPoint;
-    void Awake()
+
+
+    private void Start()
     {
-        
+        cameraPoint = GameObject.Find("camera_position");
+        lookAtPoint = GameObject.Find("camera_look_point");
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         follow();
     }
@@ -22,5 +25,6 @@ public class Camera : MonoBehaviour
     private void follow() {
         gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, cameraPoint.transform.position, Time.deltaTime * cameraSpeed);
         gameObject.transform.LookAt(lookAtPoint.gameObject.transform.position);
+
     }
 }
