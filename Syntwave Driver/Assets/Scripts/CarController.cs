@@ -25,6 +25,19 @@ public class CarController : MonoBehaviour
     [SerializeField] private WheelCollider rlCollider;
     [SerializeField] private WheelCollider rrCollider;
 
+    private WheelFrictionCurve flSidewaysFriction;
+    private WheelFrictionCurve frSidewaysFriction;
+    private WheelFrictionCurve rlSidewaysFriction;
+    private WheelFrictionCurve rrSidewaysFriction;
+
+    private WheelFrictionCurve flForwardFriction;
+    private WheelFrictionCurve frForwardFriction;
+    private WheelFrictionCurve rlForwardFriction;
+    private WheelFrictionCurve rrForwardFriction;
+
+    private WheelFrictionCurve roadForward;
+    private WheelFrictionCurve roadSideways;
+
     WheelHit wH;
 
     public float[] slip = new float[4];
@@ -74,12 +87,10 @@ public class CarController : MonoBehaviour
     private const float upshiftCooldown = 1;
     private const float downshiftCooldown = 1;
     private float currentUpshiftTime = 0;
-    private float currentDownShiftTime = 0;
 
     private void Start() {
-
+        coverageSetUp();
         VehicleSetUp();
-
     }
 
     private void FixedUpdate() {
@@ -110,6 +121,26 @@ public class CarController : MonoBehaviour
         rlCollider = GameObject.Find("wheel_collider_rl").GetComponent<WheelCollider>();
         rrCollider = GameObject.Find("wheel_collider_rr").GetComponent<WheelCollider>();
 
+        flCollider.forwardFriction = roadForward;
+        frCollider.forwardFriction = roadForward;
+        rlCollider.forwardFriction = roadForward;
+        rrCollider.forwardFriction = roadForward;
+
+        flCollider.sidewaysFriction = roadSideways;
+        frCollider.sidewaysFriction = roadSideways;
+        rlCollider.sidewaysFriction = roadSideways;
+        rrCollider.sidewaysFriction = roadSideways;
+
+        flForwardFriction = flCollider.forwardFriction;
+        frForwardFriction = frCollider.forwardFriction;
+        rlForwardFriction = rlCollider.forwardFriction;
+        rrForwardFriction = rrCollider.forwardFriction;
+
+        flSidewaysFriction = flCollider.sidewaysFriction;
+        frSidewaysFriction = frCollider.sidewaysFriction;
+        rlSidewaysFriction = rlCollider.sidewaysFriction;
+        rrSidewaysFriction = rrCollider.sidewaysFriction;
+
         flTransform = GameObject.Find("wheel_fl_axis").transform;
         frTransform = GameObject.Find("wheel_fr_axis").transform;
         rlTransform = GameObject.Find("wheel_rl_axis").transform;
@@ -124,14 +155,28 @@ public class CarController : MonoBehaviour
 
         engineRPM = 200;
     }
+
+    private void coverageSetUp() {
+        roadForward.extremumSlip = 0.4f;
+        roadForward.extremumValue = 1f;
+        roadForward.asymptoteSlip = 0.8f;
+        roadForward.asymptoteValue = 0.5f;
+        roadForward.stiffness = 1.5f;
+
+        roadSideways.extremumSlip = 0.2f;
+        roadSideways.extremumValue = 0.5f;
+        roadSideways.asymptoteSlip = 0.5f;
+        roadSideways.asymptoteValue = 0.75f;
+        roadSideways.stiffness = 1.4f;
+    }
  
     private void HandleMotor() {
         frCollider.motorTorque = verticalInput * motorForce / 4;
         flCollider.motorTorque = verticalInput * motorForce / 4;
         rrCollider.motorTorque = verticalInput * motorForce / 4;
         rlCollider.motorTorque = verticalInput * motorForce / 4;
-        physicsBody.drag = 0.25f*(1 - Mathf.Abs(verticalInput));
-        currentBreaking = (isBreaking | isHandBraking) ? breakingForce : 0f;
+        physicsBody.drag = reverseGear ? 0.5f : 0.25f*(1 - Mathf.Abs(verticalInput));
+        currentBreaking = isBreaking ? breakingForce : 0f;
         HandBrake();
         Brake();
     }
@@ -191,8 +236,9 @@ public class CarController : MonoBehaviour
     }
     
     private void HandBrake() {
-        rlCollider.brakeTorque = currentBreaking / 2;
-        rrCollider.brakeTorque = currentBreaking / 2;
+        rlCollider.brakeTorque = breakingForce / 2;
+        rrCollider.brakeTorque = breakingForce / 2;
+        skid();
     }
     private void GetFriction() {
         flCollider.GetGroundHit(out wH);
@@ -251,15 +297,20 @@ public class CarController : MonoBehaviour
     }
 
     private void calculateEnginePower() {
-        motorForce = enginePower.Evaluate(engineRPM) * gearRatios[currentGear];
+        motorForce = isGrounded() ? enginePower.Evaluate(engineRPM) * gearRatios[currentGear] : 0;
         float velocity = 0.0f;
         currentUpshiftTime += Time.deltaTime;
         engineRPM = Mathf.SmoothDamp(engineRPM, (Mathf.Abs(wheelsRPM()) * 4.4f *  gearRatios[currentGear]), ref velocity, 0.1f);
-        if (engineRPM > upshiftPoints[currentGear]) {
+        if (engineRPM < 650) {
+            engineRPM = 650;
+            currentGear = 1;
+        }
+        if (engineRPM > upshiftPoints[currentGear] & !reverseGear) {
             needToUpshift = true;
         }
         if(engineRPM > engineCutOff) {
-            engineRPM = Mathf.SmoothDamp(engineRPM, engineCutOff, ref velocity, 1f);;
+            // engineRPM = engineCutOff;
+            // engineRPM = Mathf.SmoothDamp(engineRPM, engineCutOff - 1000, ref velocity, 0.1f);
         }
         if (needToUpshift & currentUpshiftTime > upshiftCooldown) {
             upshift();
@@ -270,5 +321,38 @@ public class CarController : MonoBehaviour
         if (needToDownshift) {
             downshift();
         } 
+    }
+
+    bool isGrounded() {
+        return flCollider.GetGroundHit(out wH) | frCollider.GetGroundHit(out wH) | rlCollider.GetGroundHit(out wH) | rrCollider.GetGroundHit(out wH);
+    }
+
+    void skid() {
+        if (!isHandBraking) {
+            flCollider.forwardFriction = roadForward;
+            frCollider.forwardFriction = roadForward;
+            rlCollider.forwardFriction = roadForward;
+            rrCollider.forwardFriction = roadForward;
+
+            flCollider.sidewaysFriction = roadSideways;
+            frCollider.sidewaysFriction = roadSideways;
+            rlCollider.sidewaysFriction = roadSideways;
+            rrCollider.sidewaysFriction = roadSideways;
+        } else {
+            rlForwardFriction = rlCollider.forwardFriction;
+            rlSidewaysFriction = rlCollider.sidewaysFriction;
+            rrForwardFriction = rrCollider.forwardFriction;
+            rrSidewaysFriction = rrCollider.sidewaysFriction;
+
+            rlForwardFriction.stiffness = 0.75f;
+            rlSidewaysFriction.stiffness = 0.35f;
+            rrForwardFriction.stiffness = 0.75f;
+            rrSidewaysFriction.stiffness = 0.35f;
+
+            rlCollider.forwardFriction = rlForwardFriction;
+            rlCollider.sidewaysFriction = rlSidewaysFriction;
+            rrCollider.forwardFriction = rrForwardFriction;
+            rrCollider.sidewaysFriction = rrSidewaysFriction;
+        }
     }
 }

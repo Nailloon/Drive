@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Camera : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
     [SerializeField] private GameObject target;
     [SerializeField] private float cameraSpeed;
@@ -19,6 +19,7 @@ public class Camera : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
+        cameraSpeed = target.GetComponent<Rigidbody>().velocity.magnitude;
         follow();
     }
 
