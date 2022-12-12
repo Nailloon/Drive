@@ -963,11 +963,6 @@ MonoBehaviour:
   bar: {fileID: 463451169}
   currentRPM: 0
   maxRPM: 0
---- !u!1 &464835633 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8677972005230231817, guid: 7bb92d90971fa4d4db61ebb622539676, type: 3}
-  m_PrefabInstance: {fileID: 8677972005074277688}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &614841391
 GameObject:
   m_ObjectHideFlags: 0
@@ -1732,8 +1727,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 3892849384152457373}
   cameraSpeed: 7
-  cameraPoint: {fileID: 464835633}
-  lookAtPoint: {fileID: 1445921842}
+  cameraPoint: {fileID: 0}
+  lookAtPoint: {fileID: 0}
 --- !u!1 &997042619
 GameObject:
   m_ObjectHideFlags: 0
@@ -3014,11 +3009,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: -28.197, y: 0, z: 0}
---- !u!1 &1445921842 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8677972006380212490, guid: 7bb92d90971fa4d4db61ebb622539676, type: 3}
-  m_PrefabInstance: {fileID: 8677972005074277688}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1455835949
 GameObject:
   m_ObjectHideFlags: 0
@@ -4113,7 +4103,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4982006760917020447, guid: 7bb92d90971fa4d4db61ebb622539676, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.8
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 4982006760917020447, guid: 7bb92d90971fa4d4db61ebb622539676, type: 3}
       propertyPath: m_LocalPosition.y
