@@ -7,8 +7,8 @@ using TMPro;
 public class CarController : MonoBehaviour
 {
 
-    [SerializeField] private float horizontalInput;
-    [SerializeField] private float verticalInput;
+    [SerializeField] public float horizontalInput;
+    [SerializeField] public float verticalInput;
     private float steerAngle;
     [SerializeField] public bool isBreaking;
     private bool isHandBraking;

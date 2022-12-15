@@ -528,6 +528,7 @@ GameObject:
   - component: {fileID: 4630227468921475682}
   - component: {fileID: 4630227468921475683}
   - component: {fileID: 4630227468921475680}
+  - component: {fileID: 58182003807004142}
   m_Layer: 0
   m_Name: XT
   m_TagString: Untagged
@@ -717,6 +718,7 @@ MonoBehaviour:
   radius: 6
   wheelBase: 2.46
   downForce: 350
+  physicsBody: {fileID: 0}
   engineRPM: 0
   maxRPM: 8000
   engineCutOff: 6500
@@ -726,6 +728,31 @@ MonoBehaviour:
   downshiftPoints: 
   currentShiftDuration: 0
   reverseGear: 0
+  vectorSpeed: {x: 0, y: 0, z: 0}
+--- !u!114 &58182003807004142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5407151848641677523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0350397f84a62b44cad6d6d760e83b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  engineSoundStyle: 1
+  lowAccelClip: {fileID: 0}
+  lowDecelClip: {fileID: 0}
+  highAccelClip: {fileID: 0}
+  highDecelClip: {fileID: 0}
+  pitchMultiplier: 1
+  lowPitchMin: 1
+  lowPitchMax: 6
+  highPitchMultiplier: 0.25
+  maxRolloffDistance: 500
+  dopplerLevel: 1
+  useDoppler: 1
 --- !u!1 &7866981021895189850
 GameObject:
   m_ObjectHideFlags: 0
