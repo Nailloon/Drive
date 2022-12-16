@@ -742,13 +742,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   engineSoundStyle: 1
-  lowAccelClip: {fileID: 0}
-  lowDecelClip: {fileID: 0}
-  highAccelClip: {fileID: 0}
-  highDecelClip: {fileID: 0}
-  pitchMultiplier: 1
+  lowAccelClip: {fileID: 8300000, guid: 952e0e1a4e0dbaa449480080ab18401c, type: 3}
+  lowDecelClip: {fileID: 8300000, guid: f17642a76583fd746a8c5ed821ae6705, type: 3}
+  highAccelClip: {fileID: 8300000, guid: 18f09857358114240b7e7e7d469a3162, type: 3}
+  highDecelClip: {fileID: 8300000, guid: 2249080a67b6628489646a2e2804d9f4, type: 3}
+  pitchMultiplier: 0.4
   lowPitchMin: 1
-  lowPitchMax: 6
+  lowPitchMax: 4
   highPitchMultiplier: 0.25
   maxRolloffDistance: 500
   dopplerLevel: 1
