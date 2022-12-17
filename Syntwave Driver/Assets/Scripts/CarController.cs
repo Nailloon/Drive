@@ -88,7 +88,6 @@ public class CarController : MonoBehaviour
     private const float downshiftCooldown = 1;
     private float currentUpshiftTime = 0;
 
-    [SerializeField] Vector3 vectorSpeed;
 
     private void Start() {
         coverageSetUp();
@@ -105,7 +104,6 @@ public class CarController : MonoBehaviour
         HandleSteering();
         UpdateWheels();
         GetFriction();
-        vectorSpeed = physicsBody.velocity;
     }
     
     private void VehicleSetUp() {
