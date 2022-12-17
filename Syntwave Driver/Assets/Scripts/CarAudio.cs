@@ -130,7 +130,7 @@ using Random = UnityEngine.Random;
 
                     // get the high fade value based on the cars revs
                     float highFade = Mathf.InverseLerp(0.2f, 0.8f, m_CarController.engineRPM / m_CarController.maxRPM);
-                    float lowFade = 1 - highFade;
+                    float lowFade = 1 - 0.3f*highFade;
 
                     // adjust the values to be more realistic
                     highFade = 1 - ((1 - highFade)*(1 - highFade));
