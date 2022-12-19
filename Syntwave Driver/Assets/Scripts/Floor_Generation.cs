@@ -7,8 +7,8 @@ public class Floor_Generation : MonoBehaviour
     public GameObject[] floorPrefabs;
     private List <GameObject> activeFloor = new List <GameObject>();
     private float spawnPosition = 3;
-    private float tileLength = 100;
-    private int startFloors = 4;
+    private float tileLength = 33.6f;
+    private int startFloors = 6;
     [SerializeField] private Transform car;
     void Start()
     {
@@ -29,7 +29,7 @@ public class Floor_Generation : MonoBehaviour
     }
     private void SpawnFloor(int floorIndex)
     {
-        GameObject nextFloor = Instantiate(floorPrefabs[floorIndex], transform.right * spawnPosition, transform.rotation);
+        GameObject nextFloor = Instantiate(floorPrefabs[floorIndex], transform.right * spawnPosition, Quaternion.identity);
         activeFloor.Add(nextFloor);
         spawnPosition += tileLength;
     }
