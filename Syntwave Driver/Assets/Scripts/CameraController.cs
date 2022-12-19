@@ -23,7 +23,7 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
-        cameraPoint.transform.position = target.transform.position - 4.5f * targetController.physicsBody.velocity.normalized + 2.6f * Vector3.up;
+        cameraPoint.transform.position = target.transform.position - 4.5f * targetController.physicsBody.velocity.normalized + 1.9f * Vector3.up;
         cameraSpeed = target.GetComponent<Rigidbody>().velocity.magnitude;
         follow();
     }
