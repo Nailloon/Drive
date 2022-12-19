@@ -741,17 +741,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0350397f84a62b44cad6d6d760e83b4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  engineSoundStyle: 1
-  lowAccelClip: {fileID: 8300000, guid: b4b3ea98b7b29fa4bba15d9c40f39924, type: 3}
-  lowDecelClip: {fileID: 8300000, guid: f17642a76583fd746a8c5ed821ae6705, type: 3}
-  highAccelClip: {fileID: 8300000, guid: 8f7f4f518ce8aad449861d0f452cc9c6, type: 3}
-  highDecelClip: {fileID: 8300000, guid: 2249080a67b6628489646a2e2804d9f4, type: 3}
-  pitchMultiplier: 0.5
-  lowPitchMin: 1
+  engineSoundStyle: 0
+  lowAccelClip: {fileID: 8300000, guid: f2e8bb2e557cd394b870d3fcdd907e98, type: 3}
+  lowDecelClip: {fileID: 8300000, guid: 1c3f3b02244fb4345840fe749f1a4e68, type: 3}
+  highAccelClip: {fileID: 8300000, guid: f2e8bb2e557cd394b870d3fcdd907e98, type: 3}
+  highDecelClip: {fileID: 8300000, guid: 1c3f3b02244fb4345840fe749f1a4e68, type: 3}
+  pitchMultiplier: 1
+  lowPitchMin: 2
   lowPitchMax: 5
   highPitchMultiplier: 0.23
   maxRolloffDistance: 500
-  dopplerLevel: 1
+  dopplerLevel: 2
   useDoppler: 1
 --- !u!1 &7866981021895189850
 GameObject:
