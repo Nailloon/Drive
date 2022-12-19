@@ -10,7 +10,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private float horizontalInput;
     [SerializeField] private float verticalInput;
     private float steerAngle;
-    [SerializeField] private bool isBreaking;
+    [SerializeField] public bool isBreaking;
     private bool isHandBraking;
     private float currentBreaking;
 
@@ -63,7 +63,7 @@ public class CarController : MonoBehaviour
     
     private GameObject centerOfMassPoint;
 
-    private Rigidbody physicsBody;
+    public Rigidbody physicsBody;
 
     public float engineRPM;
     [SerializeField] public float maxRPM;
@@ -82,11 +82,12 @@ public class CarController : MonoBehaviour
     private bool needToUpshift = false;
     private bool needToDownshift = false;
 
-    [SerializeField] private bool reverseGear;
+    [SerializeField] public bool reverseGear;
 
     private const float upshiftCooldown = 1;
     private const float downshiftCooldown = 1;
     private float currentUpshiftTime = 0;
+
 
     private void Start() {
         coverageSetUp();
