@@ -26,10 +26,6 @@ public class Floor_Generation : MonoBehaviour
             SpawnFloor(Random.Range(0, floorPrefabs.Length));
             DeleteFloor();
         }
-        //if (car.position.z == spawnPosition)
-        //{
-        //    activeFloor.Clear();
-       // }
     }
     private void SpawnFloor(int floorIndex)
     {
