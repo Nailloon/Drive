@@ -15,12 +15,13 @@ public class WheelEffects : MonoBehaviour
     private WheelCollider rl;
     private WheelCollider rr;
 
-    WheelHit wH;
+    private ParticleSystem flSmoke;
+    private ParticleSystem frSmoke;
+    private ParticleSystem rlSmoke;
+    private ParticleSystem rrSmoke;
 
-    // private bool flEmitting;
-    // private bool frEmitting;
-    // private bool rrEmitting;
-    // private bool rlEmitting;
+
+    WheelHit wH;
 
     [SerializeField] private CarController carHandler;
 
@@ -37,14 +38,26 @@ public class WheelEffects : MonoBehaviour
         rl = GameObject.Find("wheel_collider_rl").GetComponent<WheelCollider>();
         rr = GameObject.Find("wheel_collider_rr").GetComponent<WheelCollider>();
 
+        flSmoke = GameObject.Find("wheel_fl_effects").GetComponent<ParticleSystem>();
+        frSmoke = GameObject.Find("wheel_fr_effects").GetComponent<ParticleSystem>();
+        rlSmoke = GameObject.Find("wheel_rl_effects").GetComponent<ParticleSystem>();
+        rrSmoke = GameObject.Find("wheel_rr_effects").GetComponent<ParticleSystem>();
     }
 
     void HandleEmitting(TrailRenderer TR, WheelCollider WC, ref int i) {
         if (!TR.emitting & WC.GetGroundHit(out wH) & Mathf.Abs(carHandler.slip[i]) > 0.4 ) {
             TR.emitting = true;
+            StartSmoke();
         }
-        if (TR.emitting & (!WC.GetGroundHit(out wH) | Mathf.Abs(carHandler.slip[i]) <= 0.4)) TR.emitting = false;
+        if (TR.emitting & (!WC.GetGroundHit(out wH) | Mathf.Abs(carHandler.slip[i]) <= 0.4)) {
+            TR.emitting = false;
+            StopSmoke();
+        }
         i += 1;
+    }
+
+    void HandleSmoke() {
+
     }
 
     // Update is called once per frame
@@ -54,5 +67,19 @@ public class WheelEffects : MonoBehaviour
         HandleEmitting(rlTrail, rl, ref wheelIndex);
         HandleEmitting(rrTrail, rr, ref wheelIndex);
         wheelIndex = 0;
+    }
+
+    void StartSmoke() {
+        flSmoke.Play();
+        frSmoke.Play();
+        rlSmoke.Play();
+        rrSmoke.Play();
+    }
+
+    void StopSmoke() {
+        flSmoke.Stop();
+        frSmoke.Stop();
+        rlSmoke.Stop();
+        rrSmoke.Stop();
     }
 }
