@@ -2615,6 +2615,7 @@ GameObject:
   - component: {fileID: 7371046262157636584}
   - component: {fileID: 7371046262157636585}
   - component: {fileID: 7371046262157636586}
+  - component: {fileID: 7937968598320065570}
   m_Layer: 0
   m_Name: XT
   m_TagString: Untagged
@@ -2814,3 +2815,27 @@ MonoBehaviour:
   downshiftPoints: 
   currentShiftDuration: 0
   reverseGear: 0
+--- !u!114 &7937968598320065570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7854531913486182745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa861dc003de7394eb2150341cebe91e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  engineSoundStyle: 1
+  lowAccelClip: {fileID: 8300000, guid: a33c8c101e76c2547b0d1ccc731f9ceb, type: 3}
+  lowDecelClip: {fileID: 8300000, guid: a33c8c101e76c2547b0d1ccc731f9ceb, type: 3}
+  highAccelClip: {fileID: 8300000, guid: a33c8c101e76c2547b0d1ccc731f9ceb, type: 3}
+  highDecelClip: {fileID: 8300000, guid: a33c8c101e76c2547b0d1ccc731f9ceb, type: 3}
+  pitchMultiplier: 0.58
+  lowPitchMin: 1
+  lowPitchMax: 4
+  highPitchMultiplier: 0.22
+  maxRolloffDistance: 500
+  dopplerLevel: 1
+  useDoppler: 1
