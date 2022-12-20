@@ -16,7 +16,6 @@ public class CameraController : MonoBehaviour
     {
         cameraPoint = GameObject.Find("camera_position");
         lookAtPoint = GameObject.Find("camera_look_point");
-
         targetController = target.GetComponent<CarController>();
     }
 
@@ -25,6 +24,7 @@ public class CameraController : MonoBehaviour
     {
         cameraPoint.transform.position = target.transform.position - 4.5f * targetController.physicsBody.velocity.normalized + 1.9f * Vector3.up;
         cameraSpeed = target.GetComponent<Rigidbody>().velocity.magnitude;
+        Camera.main.fieldOfView = 50 + Mathf.Clamp(target.GetComponent<Rigidbody>().velocity.magnitude, 0, 40);
         follow();
     }
 

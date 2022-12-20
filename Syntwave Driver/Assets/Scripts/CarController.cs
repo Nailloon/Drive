@@ -48,7 +48,7 @@ public class CarController : MonoBehaviour
     private Transform rrTransform;
 
     [SerializeField] private GameObject brakelights;
-    private brakelights brakelightsHandle;
+    private Brakelights brakelightsHandle;
     private MeshRenderer brakelightsRender;
 
     [SerializeField] private GameObject reverselights;
@@ -111,7 +111,7 @@ public class CarController : MonoBehaviour
         physicsBody = GetComponent<Rigidbody>();
 
         brakelights = GameObject.Find("brakelights"); 
-        brakelightsHandle = brakelights.GetComponent<brakelights>();
+        brakelightsHandle = brakelights.GetComponent<Brakelights>();
         brakelightsRender = brakelights.GetComponent<MeshRenderer>();
 
         reverselights = GameObject.Find("reverselights"); 
@@ -164,11 +164,11 @@ public class CarController : MonoBehaviour
         roadForward.asymptoteValue = 0.5f;
         roadForward.stiffness = 1.5f;
 
-        roadSideways.extremumSlip = 0.2f;
-        roadSideways.extremumValue = 0.5f;
+        roadSideways.extremumSlip = 0.15f;
+        roadSideways.extremumValue = 0.75f;
         roadSideways.asymptoteSlip = 0.5f;
         roadSideways.asymptoteValue = 0.75f;
-        roadSideways.stiffness = 1.4f;
+        roadSideways.stiffness = 2f;
     }
  
     private void HandleMotor() {
@@ -345,10 +345,10 @@ public class CarController : MonoBehaviour
             rrForwardFriction = rrCollider.forwardFriction;
             rrSidewaysFriction = rrCollider.sidewaysFriction;
 
-            rlForwardFriction.stiffness = 0.75f;
-            rlSidewaysFriction.stiffness = 0.35f;
-            rrForwardFriction.stiffness = 0.75f;
-            rrSidewaysFriction.stiffness = 0.35f;
+            rlForwardFriction.stiffness = 0.9f;
+            rlSidewaysFriction.stiffness = 0.8f;
+            rrForwardFriction.stiffness = 0.9f;
+            rrSidewaysFriction.stiffness = 0.8f;
 
             rlCollider.forwardFriction = rlForwardFriction;
             rlCollider.sidewaysFriction = rlSidewaysFriction;
