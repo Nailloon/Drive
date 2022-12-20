@@ -8,7 +8,7 @@ public class Floor_Generation : MonoBehaviour
     private List <GameObject> activeFloor = new List <GameObject>();
     private float spawnPosition = 3;
     private float tileLength = 33.6f;
-    private int startFloors = 6;
+    private int startFloors = 7;
     [SerializeField] private Transform car;
     void Start()
     {
@@ -21,11 +21,16 @@ public class Floor_Generation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (car.position.z + 60 < (startFloors * tileLength) - spawnPosition)
+        if (car.position.z + 130 < (startFloors * tileLength) - spawnPosition)
         {
+            SpawnFloor(Random.Range(0, floorPrefabs.Length));
             SpawnFloor(Random.Range(0, floorPrefabs.Length));
             DeleteFloor();
         }
+        //if (car.position.z == spawnPosition)
+        //{
+        //    activeFloor.Clear();
+       // }
     }
     private void SpawnFloor(int floorIndex)
     {
