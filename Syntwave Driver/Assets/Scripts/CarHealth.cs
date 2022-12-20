@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -21,6 +22,10 @@ public class CarHealth : MonoBehaviour
     public static void TakeDamage(int damage)
     {
         health -= damage;
+        if (health <= 0)
+        {
+            SceneManager.LoadScene(2);
+        }
     }
     public static int ReturnMaxHealth()
     {

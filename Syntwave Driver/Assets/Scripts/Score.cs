@@ -4,7 +4,7 @@ using UnityEngine;
 public class Score : MonoBehaviour
 {
     [SerializeField] private Transform car;
-    private int score;
+    private static int score;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI highscoreText;
 
@@ -18,5 +18,10 @@ public class Score : MonoBehaviour
         {
             PlayerPrefs.SetInt("HighScoreTex", score);
         }
+        PlayerPrefs.SetInt("Score", score);
+    }
+    public static int ReturnScore()
+    {
+        return PlayerPrefs.GetInt("Score");
     }
 }
