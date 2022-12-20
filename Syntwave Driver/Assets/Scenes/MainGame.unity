@@ -1414,6 +1414,9 @@ MonoBehaviour:
   floorPrefabs:
   - {fileID: 6413353910782725828, guid: 878b8054b139f1a49bd5e13bb3dddc91, type: 3}
   - {fileID: 5924397869272761948, guid: 8a1931f51dce7e2438b3c470f2106236, type: 3}
+  - {fileID: 8333977313451093991, guid: bdf9eac3525c0b943a7f9553e25e45af, type: 3}
+  - {fileID: 6038600947894375643, guid: d6c9bc6a2a9eda841a587b3a0b99afd6, type: 3}
+  - {fileID: 2860485172004252485, guid: 54d2a01a950935a4b968c69cf8559308, type: 3}
   car: {fileID: 136015566}
 --- !u!4 &1335545645
 Transform:
