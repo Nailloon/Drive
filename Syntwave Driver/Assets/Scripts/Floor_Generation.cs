@@ -24,7 +24,6 @@ public class Floor_Generation : MonoBehaviour
         if (car.position.z + 130 < (startFloors * tileLength) - spawnPosition)
         {
             SpawnFloor(Random.Range(0, floorPrefabs.Length));
-            SpawnFloor(Random.Range(0, floorPrefabs.Length));
             DeleteFloor();
         }
         //if (car.position.z == spawnPosition)
