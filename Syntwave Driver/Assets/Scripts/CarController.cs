@@ -7,8 +7,8 @@ using TMPro;
 public class CarController : MonoBehaviour
 {
 
-    [SerializeField] private float horizontalInput;
-    [SerializeField] private float verticalInput;
+    [SerializeField] public float horizontalInput;
+    [SerializeField] public float verticalInput;
     private float steerAngle;
     [SerializeField] public bool isBreaking;
     private bool isHandBraking;
@@ -48,7 +48,7 @@ public class CarController : MonoBehaviour
     private Transform rrTransform;
 
     [SerializeField] private GameObject brakelights;
-    private Brakelights brakelightsHandle;
+    private brakelights brakelightsHandle;
     private MeshRenderer brakelightsRender;
 
     [SerializeField] private GameObject reverselights;
@@ -111,7 +111,7 @@ public class CarController : MonoBehaviour
         physicsBody = GetComponent<Rigidbody>();
 
         brakelights = GameObject.Find("brakelights"); 
-        brakelightsHandle = brakelights.GetComponent<Brakelights>();
+        brakelightsHandle = brakelights.GetComponent<brakelights>();
         brakelightsRender = brakelights.GetComponent<MeshRenderer>();
 
         reverselights = GameObject.Find("reverselights"); 
@@ -159,10 +159,10 @@ public class CarController : MonoBehaviour
 
     private void coverageSetUp() {
         roadForward.extremumSlip = 0.4f;
-        roadForward.extremumValue = 1f;
+        roadForward.extremumValue = 0.6f;
         roadForward.asymptoteSlip = 0.8f;
         roadForward.asymptoteValue = 0.5f;
-        roadForward.stiffness = 1.5f;
+        roadForward.stiffness = 1.4f;
 
         roadSideways.extremumSlip = 0.15f;
         roadSideways.extremumValue = 0.75f;
@@ -303,6 +303,7 @@ public class CarController : MonoBehaviour
         currentUpshiftTime += Time.deltaTime;
         engineRPM = Mathf.SmoothDamp(engineRPM, (Mathf.Abs(wheelsRPM()) * 4.4f *  gearRatios[currentGear]), ref velocity, 0.1f);
         if (engineRPM < 650) {
+
             engineRPM = 650;
             currentGear = 1;
         }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Brakelights : MonoBehaviour
+public class brakelights : MonoBehaviour
 {
     private MeshRenderer brakelightsRender;
     void Start()
