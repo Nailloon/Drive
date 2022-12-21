@@ -168,7 +168,7 @@ public class CarController : MonoBehaviour
         roadSideways.extremumValue = 0.75f;
         roadSideways.asymptoteSlip = 0.5f;
         roadSideways.asymptoteValue = 0.75f;
-        roadSideways.stiffness = 2f;
+        roadSideways.stiffness = 1.8f;
     }
  
     private void HandleMotor() {
